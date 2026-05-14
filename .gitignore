@@ -1,0 +1,196 @@
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+dist/
+build/
+develop-eggs/
+downloads/
+eggs/
+parts/
+var/
+sdist/
+wheel/
+*.whl
+pip-wheel-metadata/
+share/python-wheels/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+.env
+.venv/
+venv.bak/
+env.bak/
+
+# ============================================
+# IDE
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-*
+.project
+.pydevproject
+.settings/
+
+# ============================================
+# Jupyter Notebook
+# ============================================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+*.ipynb
+!experiments/notebooks/*.ipynb
+
+# ============================================
+# Data
+# ============================================
+data/raw/*.jsonl
+data/raw/*.json
+data/processed/*.csv
+data/processed/*.parquet
+data/datasets/*.pt
+data/datasets/*.pkl
+
+# ============================================
+# Models / Checkpoints
+# ============================================
+*.pt
+*.pth
+*.onnx
+*.h5
+*.hdf5
+*.pkl
+experiments/checkpoints/*.pt
+experiments/checkpoints/*.pth
+!experiments/checkpoints/.gitkeep
+experiments/checkpoints/supervised/*.pt
+experiments/checkpoints/rl/*.pt
+experiments/checkpoints/self_play/*.pt
+experiments/checkpoints/final/*.pt
+
+# ============================================
+# Logs
+# ============================================
+*.log
+*.logs
+experiments/logs/*.log
+experiments/logs/*.csv
+!experiments/logs/.gitkeep
+logs/
+*.smi
+events.out.tfevents.*
+
+# ============================================
+# Results
+# ============================================
+experiments/results/*.json
+experiments/results/*.csv
+!experiments/results/sample_*.json
+!experiments/results/.gitkeep
+
+# ============================================
+# Plots
+# ============================================
+experiments/plots/*.png
+experiments/plots/*.pdf
+experiments/plots/*.svg
+!experiments/plots/.gitkeep
+
+# ============================================
+# Testing
+# ============================================
+.pytest_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+*.cover
+.hypothesis/
+.mypy_cache/
+.ruff_cache/
+.ruff_cache/
+
+# ============================================
+# Environment variables
+# ============================================
+.env
+.env.local
+.env.*.local
+
+# ============================================
+# Docker
+# ============================================
+docker-compose.override.yml
+*.tar.gz
+*.tgz
+
+# ============================================
+# OS
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ============================================
+# Secrets
+# ============================================
+*.key
+*.pem
+*.crt
+*.pem
+secrets/
+. secrets/
+
+# ============================================
+# Backup files
+# ============================================
+*.bak
+*.backup
+*.tmp
+*.temp
+
+# ============================================
+# Profiling
+# ============================================
+*.prof
+*.lprof
+
+# ============================================
+# TensorBoard
+# ============================================
+runs/
+tb_logs/
+
+# ============================================
+# WandB
+# ============================================
+wandb/
+wandb/
+run-*.wandb
+
+# ============================================
+# Misc
+# ============================================
+*.swp
+*.swo
+*~
+tags
+TAGS
+.vim/

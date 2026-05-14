@@ -1,0 +1,232 @@
+# ============================================
+# Neural Network Model Configuration
+# ============================================
+
+# Policy Network Configuration
+policy_network:
+  type: "standard"  # standard, multi_head, lstm, transformer
+  
+  # Input layer
+  input_dim: 115
+  
+  # Hidden layers
+  hidden_dims: [256, 256, 128]
+  activation: "relu"  # relu, leaky_relu, elu, gelu, tanh
+  use_batch_norm: true
+  dropout_rate: 0.3
+  
+  # Output layer
+  output_dim: 6  # fold, check, call, bet, raise, all_in
+  
+  # Residual connections
+  use_residual: false
+  residual_projection: true
+  
+  # Weight initialization
+  init_type: "xavier_uniform"  # xavier_uniform, xavier_normal, kaiming_uniform, orthogonal
+  init_gain: 0.5
+
+# Multi-Head Policy Network
+multi_head_policy:
+  enabled: false
+  input_dim: 115
+  hidden_dims: [256, 256]
+  num_action_heads: 6
+  bet_size_bins: 10  # Number of bet size bins for classification
+  dropout_rate: 0.3
+
+# LSTM Policy Network
+lstm_policy:
+  enabled: false
+  input_dim: 115
+  hidden_dim: 256
+  num_layers: 2
+  output_dim: 6
+  dropout_rate: 0.3
+  bidirectional: false
+  
+  # Sequence length for training
+  seq_len: 10
+
+# Transformer Policy Network
+transformer_policy:
+  enabled: false
+  input_dim: 115
+  d_model: 256
+  nhead: 8
+  num_layers: 4
+  dim_feedforward: 512
+  dropout: 0.1
+  activation: "gelu"
+  max_seq_len: 20
+
+# Value Network Configuration
+value_network:
+  type: "standard"  # standard, quantile, distributional
+  
+  input_dim: 115
+  hidden_dims: [256, 128, 64]
+  output_dim: 1
+  activation: "relu"
+  use_batch_norm: true
+  dropout_rate: 0.2
+  
+  # For distributional RL
+  num_quantiles: 32  # For quantile regression
+  num_atoms: 51  # For categorical distribution
+
+# Dual-Head Network (Policy + Value)
+dual_head:
+  enabled: true
+  input_dim: 115
+  shared_dims: [256, 256]
+  policy_head_dims: [128]
+  value_head_dims: [64]
+  policy_output_dim: 6
+  value_output_dim: 1
+  dropout_rate: 0.3
+  activation: "relu"
+
+# Loss Functions
+loss:
+  # Policy loss
+  policy_loss: "cross_entropy"  # cross_entropy, focal, crf, minimax
+  
+  # Value loss
+  value_loss: "mse"  # mse, huber, quantile
+  
+  # PPO specific
+  ppo_clip_epsilon: 0.2
+  ppo_value_clip: 0.2
+  
+  # CRF loss (for sequential actions)
+  crf:
+    enabled: false
+    transition_weight: 0.1
+    learn_transitions: true
+  
+  # Minimax loss (robust)
+  minimax:
+    enabled: false
+    epsilon: 0.1
+    temperature: 1.0
+    entropy_coef: 0.01
+
+# Optimization
+optimization:
+  optimizer: "adam"  # adam, adamw, sgd, rmsprop, adagrad
+  
+  # Adam specific
+  adam:
+    beta1: 0.9
+    beta2: 0.999
+    eps: 1.0e-8
+  
+  # SGD specific
+  sgd:
+    momentum: 0.9
+    nesterov: true
+  
+  # Learning rate schedule
+  scheduler: "step"  # step, cosine, exponential, plateau, one_cycle
+  scheduler_step_size: 20
+  scheduler_gamma: 0.5
+  
+  # OneCycle scheduler
+  one_cycle:
+    max_lr: 0.01
+    pct_start: 0.3
+    div_factor: 25.0
+    final_div_factor: 10000.0
+  
+  # Weight decay
+  weight_decay: 0.0
+  
+  # Gradient clipping
+  gradient_clip_norm: 1.0
+  gradient_clip_value: null
+
+# Regularization
+regularization:
+  dropout_rate: 0.3
+  label_smoothing: 0.0
+  weight_decay: 0.0
+  
+  # Spectral normalization
+  spectral_norm: false
+  
+  # Batch normalization
+  batch_norm_momentum: 0.1
+  batch_norm_eps: 1.0e-5
+
+# Model Checkpointing
+checkpoint:
+  save_best_only: true
+  monitor: "val_accuracy"  # val_accuracy, val_loss, episode_reward
+  mode: "max"  # min, max
+  save_frequency: 5  # epochs
+  max_keep: 5  # Maximum number of checkpoints to keep
+  save_optimizer_state: true
+  save_scheduler_state: true
+
+# Model Export
+export:
+  format: "pt"  # pt, onnx, torchscript
+  quantize: false
+  optimize: true
+  
+  # ONNX specific
+  onnx:
+    opset_version: 14
+    input_names: ["input"]
+    output_names: ["output"]
+    dynamic_axes:
+      input: {0: "batch_size"}
+      output: {0: "batch_size"}
+  
+  # TorchScript specific
+  torchscript:
+    method: "trace"  # trace, script
+    optimize_for_inference: true
+
+# Hardware Acceleration
+hardware:
+  device: "auto"  # auto, cuda, cpu, mps
+  cuda:
+    device_id: 0
+    deterministic: false
+    benchmark: true
+  
+  # Mixed precision training
+  mixed_precision: false
+  
+  # Multi-GPU
+  multi_gpu:
+    enabled: false
+    strategy: "ddp"  # ddp, data_parallel, fsdp
+  
+  # Memory optimization
+  memory:
+    gradient_checkpointing: false
+    activation_checkpointing: false
+    use_amp: false
+
+# Feature Engineering
+features:
+  # Card encoding
+  card_encoding: "one_hot"  # one_hot, ordinal, embedding
+  
+  # Hand representation
+  hand_representation: "full"  # full, rank_only, equity
+  
+  # Normalization
+  normalize_stacks: true
+  stack_max: 10000.0
+  normalize_pot: true
+  pot_max: 50000.0
+  
+  # Derived features
+  include_pot_odds: true
+  include_hand_strength: true
+  include_position: true
+  include_opponent_timing: true

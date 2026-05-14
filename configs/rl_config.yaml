@@ -1,0 +1,157 @@
+# ============================================
+# Reinforcement Learning Configuration
+# ============================================
+
+# PPO (Proximal Policy Optimization) Settings
+ppo:
+  enabled: true
+  num_episodes: 5000
+  max_steps_per_episode: 200
+  learning_rate: 0.0003
+  clip_epsilon: 0.2
+  value_coef: 0.5
+  entropy_coef: 0.01
+  gamma: 0.99
+  gae_lambda: 0.95
+  update_epochs: 4
+  batch_size: 64
+  normalize_advantages: true
+  max_grad_norm: 0.5
+  
+  # Learning rate schedule
+  lr_schedule:
+    type: "linear"  # linear, cosine, constant
+    warmup_steps: 100
+    final_lr_factor: 0.1
+
+# A2C (Advantage Actor-Critic) Settings
+a2c:
+  enabled: false
+  num_episodes: 5000
+  learning_rate: 0.0007
+  value_coef: 0.5
+  entropy_coef: 0.01
+  gamma: 0.99
+  max_grad_norm: 0.5
+  normalize_advantages: true
+
+# DQN (Deep Q-Network) Settings
+dqn:
+  enabled: false
+  num_episodes: 10000
+  learning_rate: 0.00025
+  buffer_size: 100000
+  batch_size: 64
+  gamma: 0.99
+  epsilon_start: 1.0
+  epsilon_end: 0.01
+  epsilon_decay: 0.995
+  target_update_freq: 1000
+  double_dqn: true
+  dueling_dqn: true
+
+# Environment Configuration
+environment:
+  num_opponents: 5
+  starting_stack: 1000.0
+  small_blind: 5.0
+  big_blind: 10.0
+  reward_scaling: 0.01
+  render_mode: null  # human, rgb_array, null
+  
+  # Action space
+  action_space:
+    type: "discrete"
+    num_actions: 6
+  
+  # Observation space
+  observation_space:
+    type: "box"
+    feature_dim: 115
+
+# Self-Play Configuration
+self_play:
+  enabled: false
+  num_iterations: 100
+  hands_per_iteration: 500
+  update_frequency: 5
+  opponent_pool_size: 10
+  exploration_epsilon: 0.1
+  
+  # Opponent types to include
+  include_rule_opponents: true
+  rule_opponents:
+    - "conservative"
+    - "aggressive"
+    - "tight"
+    - "loose"
+    - "random"
+  
+  # Past versions to keep
+  keep_past_versions: 5
+  
+  # Evaluation during training
+  eval_interval: 10
+  num_eval_hands: 500
+
+# Training Loop
+training:
+  seed: 42
+  device: "cuda"  # cuda, cpu
+  mixed_precision: false  # Use FP16
+  compile_model: false  # Use torch.compile
+  
+  # Checkpointing
+  save_interval: 100
+  save_best: true
+  checkpoint_dir: "experiments/checkpoints"
+  
+  # Logging
+  log_interval: 10
+  video_log_interval: 1000
+  tensorboard: true
+  wandb: false
+
+# Reward Shaping
+reward_shaping:
+  win_bonus: 10.0
+  loss_penalty: -5.0
+  action_penalty: -0.01
+  bluff_bonus: 0.0
+  
+  # Progressive rewards
+  progressive_reward: true
+  reward_scale: 0.01
+
+# Curriculum Learning
+curriculum:
+  enabled: false
+  stages:
+    - name: "beginner"
+      num_episodes: 1000
+      num_opponents: 2
+      opponent_type: "random"
+    - name: "intermediate"
+      num_episodes: 2000
+      num_opponents: 4
+      opponent_type: "conservative"
+    - name: "advanced"
+      num_episodes: 3000
+      num_opponents: 6
+      opponent_type: "mixed"
+  
+  auto_advance: true
+  advance_threshold: 0.6  # Win rate needed to advance
+
+# Evaluation Metrics
+metrics:
+  track:
+    - "episode_reward"
+    - "episode_length"
+    - "policy_loss"
+    - "value_loss"
+    - "entropy"
+    - "kl_divergence"
+    - "explained_variance"
+  
+  window_size: 100  # Rolling window for averages

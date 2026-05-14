@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  poker-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - AGENT_TYPE=policy
+      - MODEL_PATH=/app/experiments/checkpoints/best_model.pt
+      - DEVICE=cpu
+      - LOG_LEVEL=INFO
+    volumes:
+      - ../experiments:/app/experiments
+      - ../data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  poker-api-gpu:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.gpu
+    ports:
+      - "8000:8000"
+    environment:
+      - AGENT_TYPE=policy
+      - MODEL_PATH=/app/experiments/checkpoints/best_model.pt
+      - DEVICE=cuda
+    volumes:
+      - ../experiments:/app/experiments
+      - ../data:/app/data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped

@@ -1,0 +1,96 @@
+# ============================================
+# Deployment Configuration
+# ============================================
+
+# API Deployment
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: false
+  log_level: "info"
+  
+  # SSL/TLS
+  ssl:
+    enabled: false
+    cert_path: "/etc/ssl/certs/server.crt"
+    key_path: "/etc/ssl/private/server.key"
+  
+  # CORS
+  cors:
+    allowed_origins: ["*"]
+    allowed_methods: ["GET", "POST"]
+    allowed_headers: ["*"]
+    allow_credentials: true
+
+# Rate Limiting
+rate_limit:
+  enabled: true
+  requests_per_minute: 300
+  burst_multiplier: 1.5
+  policy: "sliding_window"  # sliding_window, token_bucket, fixed_window
+
+# Authentication
+auth:
+  enabled: false
+  type: "api_key"  # api_key, jwt, oauth2
+  api_key_header: "X-API-Key"
+  valid_api_keys: []  # List of valid keys (or use environment variable)
+
+# Model Serving
+serving:
+  batch_size: 32
+  max_batch_delay: 0.1  # seconds
+  use_gpu: true
+  gpu_device: 0
+  
+  # Model caching
+  cache:
+    enabled: true
+    max_size: 1000  # Number of states to cache
+    ttl: 3600  # seconds
+  
+  # Prediction timeout
+  timeout: 5.0  # seconds
+
+# Monitoring
+monitoring:
+  enabled: true
+  metrics_port: 9090
+  prometheus:
+    enabled: true
+    path: "/metrics"
+  
+  health_check:
+    liveness_path: "/health/live"
+    readiness_path: "/health/ready"
+    startup_path: "/health/startup"
+  
+  logging:
+    level: "INFO"
+    format: "json"  # json, text
+    output: ["stdout", "file"]
+    file_path: "logs/api.log"
+
+# Scaling
+scaling:
+  min_replicas: 1
+  max_replicas: 10
+  target_cpu_utilization: 70
+  target_memory_utilization: 80
+  
+  # Auto-scaling metrics
+  metrics:
+    - "requests_per_second"
+    - "cpu_utilization"
+    - "gpu_utilization"
+
+# Load Testing
+load_test:
+  enabled: false
+  concurrent_users: 100
+  ramp_up_time: 30  # seconds
+  test_duration: 300  # seconds
+  endpoints:
+    - "/predict"
+    - "/health"

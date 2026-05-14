@@ -1,0 +1,84 @@
+# ============================================
+# Evaluation Configuration
+# ============================================
+
+# Evaluation Settings
+evaluation:
+  num_hands: 1000
+  num_opponents: 5
+  starting_stack: 1000.0
+  small_blind: 5.0
+  big_blind: 10.0
+  
+  # Opponent types to evaluate against
+  opponents:
+    - "random"
+    - "conservative"
+    - "aggressive"
+    - "tight"
+    - "loose"
+    - "always_fold"
+    - "always_call"
+  
+  # Evaluation modes
+  modes:
+    - "head_to_head"
+    - "multi_table"
+    - "tournament"
+
+# Metrics to compute
+metrics:
+  primary:
+    - "win_rate"
+    - "avg_profit"
+    - "total_profit"
+    - "final_stack"
+  
+  secondary:
+    - "action_accuracy"
+    - "expected_value"
+    - "sharpe_ratio"
+    - "max_drawdown"
+    - "volatility"
+  
+  detailed:
+    - "action_distribution"
+    - "street_performance"
+    - "position_performance"
+    - "hand_strength_performance"
+
+# Statistical Analysis
+statistics:
+  confidence_interval: 0.95
+  bootstrap_samples: 1000
+  significance_level: 0.05
+  
+  # Statistical tests
+  tests:
+    - "t_test"
+    - "mann_whitney"
+    - "wilcoxon"
+
+# Visualization
+visualization:
+  enabled: true
+  output_dir: "experiments/results/plots"
+  formats: ["png", "pdf"]
+  dpi: 150
+  
+  plots:
+    - "win_rate_curve"
+    - "profit_distribution"
+    - "action_distribution"
+    - "confusion_matrix"
+    - "learning_curve"
+
+# Report Generation
+report:
+  format: "html"  # html, pdf, markdown
+  template: "default"
+  include_tables: true
+  include_plots: true
+  include_recommendations: true
+  
+  output_dir: "experiments/results/reports"

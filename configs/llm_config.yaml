@@ -1,0 +1,92 @@
+# ============================================
+# LLM Agent Configuration
+# ============================================
+
+# General Settings
+llm:
+  enabled: true
+  agent_name: "LLMPokerAgent"
+  
+# Model Selection
+model:
+  # Options: gpt-3.5-turbo, gpt-4, gpt-4-turbo, claude-3, llama2, mistral
+  name: "gpt-3.5-turbo"
+  version: "latest"
+  
+  # For local models (llama.cpp, Ollama)
+  local:
+    enabled: false
+    path: "./models/llama-2-7b.gguf"
+    context_length: 4096
+    threads: 4
+
+# API Settings (for cloud models)
+api:
+  provider: "openai"  # openai, anthropic, cohere, together
+  base_url: null  # Custom endpoint if needed
+  timeout: 30
+  max_retries: 3
+  retry_delay: 1.0
+  
+# Authentication
+auth:
+  api_key_env: "OPENAI_API_KEY"  # Environment variable name
+  organization: null  # OpenAI organization ID
+
+# Generation Parameters
+generation:
+  temperature: 0.7
+  max_tokens: 150
+  top_p: 0.95
+  frequency_penalty: 0.0
+  presence_penalty: 0.0
+  stop_sequences: ["\n\n", "Action:", "Reasoning:"]
+
+# Prompt Engineering
+prompt:
+  system_prompt: |
+    You are a professional Texas Hold'em poker player. 
+    Make optimal decisions based on game theory and expected value.
+    Always explain your reasoning before making a decision.
+  
+  include_few_shot: true
+  few_shot_examples: 4
+  include_history: true
+  max_history_length: 10
+  
+  # Card notation
+  card_format: "standard"  # standard, descriptive
+  
+  # Output format
+  output_format: |
+    Reasoning: [Your analysis here]
+    Action: [fold|check|call|bet|raise|all_in], bet_size: [amount]
+
+# Context Management
+context:
+  max_turns: 20
+  truncate_strategy: "keep_recent"  # keep_recent, keep_important
+  include_player_info: true
+  include_position_info: true
+  include_stack_info: true
+
+# Cost Management (for API models)
+cost:
+  max_cost_per_request: 0.01  # USD
+  max_daily_cost: 1.0  # USD
+  track_usage: true
+  cache_responses: true
+  cache_ttl: 3600  # seconds
+
+# Fallback Settings
+fallback:
+  enabled: true
+  strategy: "rule_based"  # rule_based, random, conservative
+  on_timeout: "fold"
+  on_error: "conservative"
+
+# Evaluation
+evaluation:
+  compare_with_baseline: true
+  baseline_type: "conservative"
+  num_eval_hands: 500

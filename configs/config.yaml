@@ -1,0 +1,35 @@
+# Poker Agent - Simplified Configuration
+
+# Agent settings
+agent_type: policy
+agent_name: PokerAgent
+device: cpu
+
+# Model settings
+model_input_dim: 115
+model_hidden_dims: [256, 128]
+model_output_dim: 6
+model_dropout: 0.3
+
+# Training settings
+batch_size: 32
+learning_rate: 0.001
+num_epochs: 10
+
+# Data settings
+data_dir: data
+processed_dir: data/processed
+raw_dir: data/raw
+
+# Experiment settings
+experiment_name: test_run
+checkpoint_dir: experiments/checkpoints
+log_dir: experiments/logs
+results_dir: experiments/results
+
+# Logging
+log_level: INFO
+use_wandb: false
+
+# Random seed
+seed: 42
