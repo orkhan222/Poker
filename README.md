@@ -1,4 +1,3 @@
-# C:\Users\user\Desktop\Secop\poker-ai-agent\README.md
 
 echo "# Poker Agent
 
